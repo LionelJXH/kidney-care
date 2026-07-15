@@ -1,0 +1,14 @@
+{
+  "string": [
+    { "name": "app_name", "value": "肾康助手" },
+    { "name": "entry_desc", "value": "慢性肾病健康管理助手" },
+    { "name": "entryability_desc", "value": "应用主入口" },
+    { "name": "blood_pressure", "value": "血压" },
+    { "name": "weight", "value": "体重" },
+    { "name": "lab_test", "value": "化验记录" },
+    { "name": "history", "value": "历史记录" },
+    { "name": "today", "value": "今日" },
+    { "name": "save", "value": "保存" },
+    { "name": "cancel", "value": "取消" }
+  ]
+}

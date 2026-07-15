@@ -1,0 +1,24 @@
+{
+  "string": [
+    { "name": "app_name", "value": "Kidney Care" },
+    { "name": "entry_desc", "value": "Chronic Kidney Disease Health Manager" },
+    { "name": "entryability_desc", "value": "Main Entry" },
+    { "name": "blood_pressure", "value": "Blood Pressure" },
+    { "name": "weight", "value": "Weight" },
+    { "name": "lab_test", "value": "Lab Test" },
+    { "name": "history", "value": "History" },
+    { "name": "today", "value": "Today" },
+    { "name": "save", "value": "Save" },
+    { "name": "cancel", "value": "Cancel" },
+    { "name": "systolic", "value": "Systolic" },
+    { "name": "diastolic", "value": "Diastolic" },
+    { "name": "pulse", "value": "Pulse" },
+    { "name": "unit_mmhg", "value": "mmHg" },
+    { "name": "unit_kg", "value": "kg" },
+    { "name": "blood_test", "value": "Blood Test" },
+    { "name": "urine_test", "value": "Urine Test" },
+    { "name": "no_records", "value": "No records yet" },
+    { "name": "record_saved", "value": "Record saved" },
+    { "name": "input_required", "value": "Please fill required fields" }
+  ]
+}

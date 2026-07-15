@@ -1,0 +1,8 @@
+{
+  "name": "entry",
+  "version": "1.0.0",
+  "description": "慢性肾病健康管理 - 元服务入口模块",
+  "main": "",
+  "types": "",
+  "dependencies": {}
+}

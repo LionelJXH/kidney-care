@@ -1,0 +1,23 @@
+# 编译输出
+/build/
+/entry/build/
+/entry/default/
+.hvigor/
+*.hap
+*.app
+
+# IDE 配置
+.idea/
+*.iml
+local.properties
+
+# Node 依赖
+node_modules/
+oh_modules/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 日志
+*.log

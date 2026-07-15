@@ -1,0 +1,10 @@
+{
+  "src": [
+    "pages/Index",
+    "pages/BloodPressurePage",
+    "pages/WeightPage",
+    "pages/LabTestPage",
+    "pages/LabTestDetailPage",
+    "pages/HistoryPage"
+  ]
+}

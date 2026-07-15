@@ -1,0 +1,5 @@
+{
+  "rules": {
+    "ArkTS:Visible$*": ["warn", { "variable": ["State"] }]
+  }
+}
