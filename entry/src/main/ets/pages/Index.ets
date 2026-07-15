@@ -123,7 +123,7 @@ struct Index {
               title: '血压',
               subtitle: this.todayBpCount > 0 ? `最近 ${this.latestSystolic}/${this.latestDiastolic}` : '点击记录',
               color: '#E8573A',
-              onClick: () => {
+              cardClick: () => {
                 router.pushUrl({ url: 'pages/BloodPressurePage' });
               }
             })
@@ -134,7 +134,7 @@ struct Index {
               title: '体重',
               subtitle: this.latestWeight !== '--' ? `${this.latestWeight} kg` : '点击记录',
               color: '#4A90D9',
-              onClick: () => {
+              cardClick: () => {
                 router.pushUrl({ url: 'pages/WeightPage' });
               }
             })
@@ -203,7 +203,7 @@ struct QuickEntryCard {
   private title: string = '';
   private subtitle: string = '';
   private color: string = '#4A90D9';
-  private onClick: () => void = () => {};
+  private cardClick: () => void = () => {};
 
   build() {
     Column() {
@@ -217,7 +217,7 @@ struct QuickEntryCard {
     .borderRadius(14)
     .alignItems(HorizontalAlign.Center)
     .onClick(() => {
-      this.onClick();
+      this.cardClick();
     })
   }
 }

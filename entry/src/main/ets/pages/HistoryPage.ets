@@ -49,9 +49,9 @@ struct HistoryPage {
 
       // Tab 切换
       Row() {
-        TabButton({ title: '❤️ 血压', active: this.activeTab === 0, onClick: () => { this.activeTab = 0; } })
-        TabButton({ title: '⚖️ 体重', active: this.activeTab === 1, onClick: () => { this.activeTab = 1; } })
-        TabButton({ title: '🧪 化验', active: this.activeTab === 2, onClick: () => { this.activeTab = 2; } })
+        TabButton({ title: '❤️ 血压', active: this.activeTab === 0, tabClick: () => { this.activeTab = 0; } })
+        TabButton({ title: '⚖️ 体重', active: this.activeTab === 1, tabClick: () => { this.activeTab = 1; } })
+        TabButton({ title: '🧪 化验', active: this.activeTab === 2, tabClick: () => { this.activeTab = 2; } })
       }
       .width('100%').padding({ left: 16, right: 16 })
       .backgroundColor('#FFFFFF')
@@ -180,7 +180,7 @@ struct HistoryPage {
 struct TabButton {
   private title: string = '';
   private active: boolean = false;
-  private onClick: () => void = () => {};
+  private tabClick: () => void = () => {};
 
   build() {
     Column() {
@@ -188,7 +188,6 @@ struct TabButton {
         .fontSize(14)
         .fontWeight(this.active ? FontWeight.Bold : FontWeight.Normal)
         .fontColor(this.active ? COLORS.primary : COLORS.textSecondary)
-      // 激活指示线
       Row()
         .width('80%').height(3)
         .backgroundColor(this.active ? COLORS.primary : Color.Transparent)
@@ -197,7 +196,9 @@ struct TabButton {
     }
     .layoutWeight(1)
     .padding({ top: 10, bottom: 4 })
-    .onClick(() => { this.onClick(); })
+    .onClick(() => {
+      this.tabClick();
+    })
   }
 }
 
