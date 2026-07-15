@@ -194,11 +194,12 @@ export async function getLabTests(limit: number = 20): Promise<LabTestRecord[]> 
   const result = await store.querySql(sql, [limit]);
   const records: LabTestRecord[] = [];
   while (result.goToNextRow()) {
+    const items: TestRecordItem[] = JSON.parse(result.getString(result.getColumnIndex('items'))) as TestRecordItem[];
     records.push({
       id: result.getLong(result.getColumnIndex('id')),
       timestamp: result.getLong(result.getColumnIndex('timestamp')),
       testType: result.getString(result.getColumnIndex('test_type')) as 'blood' | 'urine',
-      items: JSON.parse(result.getString(result.getColumnIndex('items'))),
+      items: items,
       createTime: result.getLong(result.getColumnIndex('create_time'))
     });
   }
@@ -211,11 +212,12 @@ export async function getLatestLabTest(): Promise<LabTestRecord | null> {
   const sql = `SELECT * FROM ${TABLE_LAB} ORDER BY timestamp DESC LIMIT 1`;
   const result = await store.querySql(sql);
   if (result.goToFirstRow()) {
+    const items: TestRecordItem[] = JSON.parse(result.getString(result.getColumnIndex('items'))) as TestRecordItem[];
     const record: LabTestRecord = {
       id: result.getLong(result.getColumnIndex('id')),
       timestamp: result.getLong(result.getColumnIndex('timestamp')),
       testType: result.getString(result.getColumnIndex('test_type')) as 'blood' | 'urine',
-      items: JSON.parse(result.getString(result.getColumnIndex('items'))),
+      items: items,
       createTime: result.getLong(result.getColumnIndex('create_time'))
     };
     result.close();

@@ -14,21 +14,21 @@ import router from '@ohos.router';
 struct LabTestDetailPage {
   @State testType: string = 'blood';
   @State items: TestItem[] = BLOOD_TEST_ITEMS;
-  @State values: Record<string, string> = {};
-  @State selectValues: Record<string, string> = {};
+  @State values: { [key: string]: string } = {};
+  @State selectValues: { [key: string]: string } = {};
   @State saved: boolean = false;
   @State errorMsg: string = '';
   @State recordDate: string = '';
 
   aboutToAppear(): void {
     // 获取路由参数
-    const params = router.getParams() as Record<string, string>;
+    const params = router.getParams() as { [key: string]: string };
     if (params && params.testType) {
       this.testType = params.testType;
       this.items = this.testType === 'blood' ? BLOOD_TEST_ITEMS : URINE_TEST_ITEMS;
 
       // 初始化默认值
-      this.items.forEach(item => {
+      this.items.forEach((item: TestItem) => {
         if (item.type === 'number') {
           this.values[item.key] = '';
         } else if (item.type === 'select' && item.options && item.options.length > 0) {
@@ -49,7 +49,7 @@ struct LabTestDetailPage {
     this.errorMsg = '';
 
     // 收集填写的项目（只保存有值的）
-    const filledItems: Record<string, string>[] = [];
+    const filledItems: TestRecordItem[] = [];
 
     for (const item of this.items) {
       if (item.type === 'number') {
@@ -166,20 +166,20 @@ struct LabTestDetailPage {
                 // 输入控件
                 if (item.type === 'number') {
                   // 数值输入
-                  Row() {
-                    TextInput({ placeholder: item.placeholder, text: this.values[item.key] })
-                      .placeholderColor(COLORS.textHint)
-                      .fontSize(18).fontWeight(FontWeight.Bold)
-                      .height(44).layoutWeight(1)
-                      .type(InputType.Number)
-                      .onChange((v) => {
-                        this.values[item.key] = v;
-                      })
-                    if (item.unit) {
-                      Text(item.unit).fontSize(14).fontColor(COLORS.textSecondary).margin({ left: 8 })
+                    Row() {
+                      TextInput({ placeholder: item.placeholder, text: this.values[item.key] })
+                        .placeholderColor(COLORS.textHint)
+                        .fontSize(18).fontWeight(FontWeight.Bold)
+                        .height(44).layoutWeight(1)
+                        .type(InputType.Number)
+                        .onChange((v: string) => {
+                          this.values = { ...this.values, [item.key]: v };
+                        })
+                      if (item.unit) {
+                        Text(item.unit).fontSize(14).fontColor(COLORS.textSecondary).margin({ left: 8 })
+                      }
                     }
-                  }
-                  .margin({ top: 8 })
+                    .margin({ top: 8 })
                 } else {
                   // 选择型（定性） - 使用 RadioGroup
                   Column() {

@@ -3,7 +3,7 @@
  * 按时间线展示血压、体重、化验记录
  */
 import { getBpRecords, getWeightRecords, getLabTests } from '../common/Database';
-import { COLORS, formatDateTime, formatDate, BpRecord, WeightRecord, LabTestRecord } from '../common/Constants';
+import { COLORS, formatDateTime, formatDate, BpRecord, WeightRecord, LabTestRecord, TestRecordItem } from '../common/Constants';
 import { Card } from '../common/Card';
 import router from '@ohos.router';
 
@@ -143,7 +143,7 @@ struct HistoryPage {
                     .width('100%')
 
                     // 显示化验项目摘要
-                    ForEach(record.items.slice(0, 5), (item) => {
+                    ForEach(record.items.slice(0, 5), (item: TestRecordItem) => {
                       Row() {
                         Text(item.name).fontSize(13).fontColor(COLORS.textSecondary)
                           .layoutWeight(1)
