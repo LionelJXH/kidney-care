@@ -21,3 +21,11 @@ Thumbs.db
 
 # 日志
 *.log
+
+# 临时交付文件（仅供本地/网盘传输，不进入仓库）
+*.zip
+download.html
+unzip-kidney-care.ps1
+kidney-care-base64.txt
+_widget_code.txt
+_widget_data.txt
