@@ -3,6 +3,49 @@
  * 包含血检、尿检的关键指标定义
  */
 
+// 类型定义
+export interface TestItem {
+  key: string;
+  name: string;
+  unit: string;
+  type: 'number' | 'select';
+  options?: string[];
+  normalRange: string;
+  placeholder: string;
+}
+
+export interface TestRecordItem {
+  key: string;
+  name: string;
+  unit: string;
+  value: string;
+  type: 'number' | 'select';
+}
+
+export interface LabTestRecord {
+  id?: number;
+  timestamp: number;
+  testType: 'blood' | 'urine';
+  items: TestRecordItem[];
+  createTime?: number;
+}
+
+export interface BpRecord {
+  id?: number;
+  timestamp: number;
+  systolic: number;
+  diastolic: number;
+  pulse: number;
+  createTime?: number;
+}
+
+export interface WeightRecord {
+  id?: number;
+  timestamp: number;
+  weight: number;
+  createTime?: number;
+}
+
 // 血检指标定义
 export const BLOOD_TEST_ITEMS = [
   {
