@@ -1,4 +1,5 @@
 {
+  "modelVersion": "6.1.1",
   "name": "kidney-care",
   "version": "1.0.0",
   "description": "慢性肾病健康管理助手 - 元服务",
