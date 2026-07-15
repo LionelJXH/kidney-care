@@ -4,7 +4,7 @@
  * 数值型 → 输入框
  * 选择型（定性）→ 选择器
  */
-import { BLOOD_TEST_ITEMS, URINE_TEST_ITEMS, COLORS, formatDate, TestItem } from '../common/Constants';
+import { BLOOD_TEST_ITEMS, URINE_TEST_ITEMS, COLORS, formatDate, TestItem, TestRecordItem } from '../common/Constants';
 import { insertLabTest } from '../common/Database';
 import { Card } from '../common/Card';
 import router from '@ohos.router';
