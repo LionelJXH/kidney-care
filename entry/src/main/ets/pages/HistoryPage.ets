@@ -188,11 +188,21 @@ struct TabButton {
         .fontSize(14)
         .fontWeight(this.active ? FontWeight.Bold : FontWeight.Normal)
         .fontColor(this.active ? COLORS.primary : COLORS.textSecondary)
-      Row()
-        .width('80%').height(3)
-        .backgroundColor(this.active ? COLORS.primary : Color.Transparent)
-        .borderRadius(2)
-        .margin({ top: 4 })
+      if (this.active) {
+        Row()
+          .width('80%')
+          .height(3)
+          .backgroundColor(COLORS.primary)
+          .borderRadius(2)
+          .margin({ top: 4 })
+      } else {
+        Row()
+          .width('80%')
+          .height(3)
+          .backgroundColor(Color.Transparent)
+          .borderRadius(2)
+          .margin({ top: 4 })
+      }
     }
     .layoutWeight(1)
     .padding({ top: 10, bottom: 4 })

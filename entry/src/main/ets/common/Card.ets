@@ -1,20 +1,7 @@
 /**
- * 通用卡片容器组件
+ * 通用卡片样式
  */
-import { COLORS } from './Constants';
-
-@Component
-export struct Card {
-  @BuilderParam content: () => void = this.emptyBuilder;
-
-  @Builder emptyBuilder() {
-  }
-
-  build() {
-    Column() {
-      this.content()
-    }
-    .backgroundColor(COLORS.cardBg)
-    .borderRadius(14)
-  }
-}
+export const CARD_STYLE = {
+  backgroundColor: '#FFFFFF',
+  borderRadius: 14
+};
