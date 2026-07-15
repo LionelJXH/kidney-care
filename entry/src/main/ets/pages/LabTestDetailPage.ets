@@ -6,6 +6,7 @@
  */
 import { BLOOD_TEST_ITEMS, URINE_TEST_ITEMS, COLORS, formatDate, TestItem } from '../common/Constants';
 import { insertLabTest } from '../common/Database';
+import { Card } from '../common/Card';
 import router from '@ohos.router';
 
 @Entry
@@ -233,10 +234,3 @@ struct LabTestDetailPage {
   }
 }
 
-@Component
-struct Card {
-  build() {
-    Column() { this.children }
-      .backgroundColor(COLORS.cardBg).borderRadius(14)
-  }
-}

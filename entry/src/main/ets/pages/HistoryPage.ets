@@ -4,6 +4,7 @@
  */
 import { getBpRecords, getWeightRecords, getLabTests } from '../common/Database';
 import { COLORS, formatDateTime, formatDate, BpRecord, WeightRecord, LabTestRecord } from '../common/Constants';
+import { Card } from '../common/Card';
 import router from '@ohos.router';
 
 @Entry
@@ -200,10 +201,4 @@ struct TabButton {
   }
 }
 
-@Component
-struct Card {
-  build() {
-    Column() { this.children }
-      .backgroundColor(COLORS.cardBg).borderRadius(14)
-  }
-}
+

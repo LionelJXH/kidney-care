@@ -4,6 +4,7 @@
  */
 import { getTodayBpRecords, getLatestWeight, getLatestLabTest } from '../common/Database';
 import { formatTime, formatDate, BP_NORMAL, COLORS } from '../common/Constants';
+import { Card } from '../common/Card';
 import router from '@ohos.router';
 
 @Entry
@@ -222,13 +223,3 @@ struct QuickEntryCard {
 }
 
 // 通用卡片容器
-@Component
-struct Card {
-  build() {
-    Column() {
-      this.children
-    }
-    .backgroundColor(COLORS.cardBg)
-    .borderRadius(14)
-  }
-}

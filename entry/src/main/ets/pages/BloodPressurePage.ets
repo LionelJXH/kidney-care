@@ -4,6 +4,7 @@
  */
 import { insertBpRecord } from '../common/Database';
 import { BP_NORMAL, COLORS, formatTime } from '../common/Constants';
+import { Card } from '../common/Card';
 import router from '@ohos.router';
 
 @Entry
@@ -234,14 +235,3 @@ struct BloodPressurePage {
   }
 }
 
-// 卡片容器
-@Component
-struct Card {
-  build() {
-    Column() {
-      this.children
-    }
-    .backgroundColor(COLORS.cardBg)
-    .borderRadius(14)
-  }
-}

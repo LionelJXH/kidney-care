@@ -3,6 +3,7 @@
  * 选择血检或尿检，然后进入指标填写
  */
 import { COLORS } from '../common/Constants';
+import { Card } from '../common/Card';
 import router from '@ohos.router';
 
 @Entry
@@ -100,10 +101,3 @@ struct LabTestPage {
   }
 }
 
-@Component
-struct Card {
-  build() {
-    Column() { this.children }
-      .backgroundColor(COLORS.cardBg).borderRadius(14)
-  }
-}
