@@ -12,9 +12,9 @@ export struct Card {
 
   build() {
     Column() {
-      this.content();
+      this.content()
     }
     .backgroundColor(COLORS.cardBg)
-    .borderRadius(14);
+    .borderRadius(14)
   }
 }

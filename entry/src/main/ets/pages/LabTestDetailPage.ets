@@ -184,17 +184,17 @@ struct LabTestDetailPage {
                   // 选择型（定性） - 使用 RadioGroup
                   Column() {
                     Row() {
-                      ForEach(item.options, (opt: string) => {
+                      ForEach(item.options ?? [], (opt: string) => {
                         Row() {
                           Radio({ value: opt, group: item.key })
                             .checked(this.selectValues[item.key] === opt)
                             .onChange(() => {
-                              this.selectValues[item.key] = opt;
+                              this.selectValues = { ...this.selectValues, [item.key]: opt };
                             })
                           Text(opt).fontSize(14).fontColor(COLORS.textPrimary).margin({ left: 4 })
                         }
                         .margin({ right: 8 })
-                      })
+                      }, (opt: string) => opt)
                     }
                     .margin({ top: 8 })
                   }
@@ -205,7 +205,7 @@ struct LabTestDetailPage {
             }
             .width('100%')
             .margin({ top: 2 })
-          })
+          }, (item: TestItem) => item.key)
 
           // 错误提示
           if (this.errorMsg !== '') {

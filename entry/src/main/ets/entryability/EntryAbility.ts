@@ -3,6 +3,13 @@ import UIAbility from '@ohos.app.ability.UIAbility';
 import Want from '@ohos.app.ability.Want';
 import window from '@ohos.window';
 
+// 全局 context 类型声明
+export {};
+
+declare global {
+  var context: Context;
+}
+
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     globalThis.context = this.context;

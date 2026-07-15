@@ -47,7 +47,7 @@ export interface WeightRecord {
 }
 
 // 血检指标定义
-export const BLOOD_TEST_ITEMS = [
+export const BLOOD_TEST_ITEMS: TestItem[] = [
   {
     key: 'creatinine',
     name: '血肌酐 (Cr)',
@@ -131,7 +131,7 @@ export const BLOOD_TEST_ITEMS = [
 ];
 
 // 尿检指标定义
-export const URINE_TEST_ITEMS = [
+export const URINE_TEST_ITEMS: TestItem[] = [
   {
     key: 'urine_protein',
     name: '尿蛋白 (Pro)',

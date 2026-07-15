@@ -90,7 +90,7 @@ struct HistoryPage {
                 }
                 .width('100%')
                 .margin({ top: 6 })
-              })
+              }, (record: BpRecord) => record.id?.toString() || record.timestamp.toString())
             }
           }
           .padding({ left: 20, right: 20, bottom: 40 })
@@ -118,7 +118,7 @@ struct HistoryPage {
                 }
                 .width('100%')
                 .margin({ top: 6 })
-              })
+              }, (record: WeightRecord) => record.id?.toString() || record.timestamp.toString())
             }
           }
           .padding({ left: 20, right: 20, bottom: 40 })
@@ -151,7 +151,7 @@ struct HistoryPage {
                           .fontSize(13).fontWeight(FontWeight.Bold).fontColor(COLORS.textPrimary)
                       }
                       .width('100%').margin({ top: 4 })
-                    })
+                    }, (item: TestRecordItem) => item.key + item.value)
                     if (record.items.length > 5) {
                       Text(`... 还有 ${record.items.length - 5} 项`)
                         .fontSize(12).fontColor(COLORS.textHint).margin({ top: 4 })
@@ -162,7 +162,7 @@ struct HistoryPage {
                 }
                 .width('100%')
                 .margin({ top: 6 })
-              })
+              }, (record: LabTestRecord) => record.id?.toString() || record.timestamp.toString())
             }
           }
           .padding({ left: 20, right: 20, bottom: 40 })
