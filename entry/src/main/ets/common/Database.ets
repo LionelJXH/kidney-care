@@ -2,16 +2,11 @@
  * 数据库管理 - 使用关系型数据库 (SQLite)
  */
 import relationalStore from '@ohos.data.relationalStore';
-import { BpRecord, WeightRecord, LabTestRecord, TestRecordItem } from './Constants';
 
 const DB_NAME = 'kidney_care.db';
-const TABLE_BP = 'blood_pressure';
-const TABLE_WEIGHT = 'weight_record';
-const TABLE_LAB = 'lab_test';
 
 let rdbStore: relationalStore.RdbStore | null = null;
 
-// 获取数据库实例
 export async function getRdbStore(): Promise<relationalStore.RdbStore> {
   if (rdbStore) {
     return rdbStore;
@@ -23,206 +18,138 @@ export async function getRdbStore(): Promise<relationalStore.RdbStore> {
   };
 
   rdbStore = await relationalStore.getRdbStore(globalThis.context, config);
-  await initTables(rdbStore);
+
+  const sqls: string[] = [
+    'CREATE TABLE IF NOT EXISTS blood_pressure (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER NOT NULL, systolic INTEGER NOT NULL, diastolic INTEGER NOT NULL, pulse INTEGER DEFAULT 0, create_time INTEGER NOT NULL)',
+    'CREATE TABLE IF NOT EXISTS weight_record (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER NOT NULL, weight REAL NOT NULL, create_time INTEGER NOT NULL)',
+    'CREATE TABLE IF NOT EXISTS lab_test (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER NOT NULL, test_type TEXT NOT NULL, items TEXT NOT NULL, create_time INTEGER NOT NULL)'
+  ];
+
+  for (let i = 0; i < sqls.length; i++) {
+    await rdbStore.executeSql(sqls[i]);
+  }
+
   return rdbStore;
 }
 
-// 初始化表结构
-async function initTables(store: relationalStore.RdbStore): Promise<void> {
-  const sqls = [
-    `CREATE TABLE IF NOT EXISTS ${TABLE_BP} (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      timestamp INTEGER NOT NULL,
-      systolic INTEGER NOT NULL,
-      diastolic INTEGER NOT NULL,
-      pulse INTEGER DEFAULT 0,
-      create_time INTEGER NOT NULL
-    )`,
-    `CREATE TABLE IF NOT EXISTS ${TABLE_WEIGHT} (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      timestamp INTEGER NOT NULL,
-      weight REAL NOT NULL,
-      create_time INTEGER NOT NULL
-    )`,
-    `CREATE TABLE IF NOT EXISTS ${TABLE_LAB} (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      timestamp INTEGER NOT NULL,
-      test_type TEXT NOT NULL,
-      items TEXT NOT NULL,
-      create_time INTEGER NOT NULL
-    )`
-  ];
+// 血压记录
 
-  for (const sql of sqls) {
-    await store.executeSql(sql);
-  }
-}
-
-// ===== 血压记录 =====
-
-export async function insertBpRecord(record: BpRecord): Promise<number> {
+export async function insertBpRecord(record: any): Promise<number> {
   const store = await getRdbStore();
-  const now = Date.now();
   const row = {
     timestamp: record.timestamp,
     systolic: record.systolic,
     diastolic: record.diastolic,
     pulse: record.pulse || 0,
-    create_time: now
+    create_time: Date.now()
   };
-  const rowId = await store.insert(TABLE_BP, row);
-  return rowId;
+  return store.insert('blood_pressure', row);
 }
 
-export async function getBpRecords(dateStart?: number, dateEnd?: number): Promise<BpRecord[]> {
+export async function getBpRecords(): Promise<any[]> {
   const store = await getRdbStore();
-  let where = '';
-  let args: number[] = [];
-  if (dateStart && dateEnd) {
-    where = 'WHERE timestamp >= ? AND timestamp <= ?';
-    args = [dateStart, dateEnd];
-  }
-  const sql = `SELECT * FROM ${TABLE_BP} ${where} ORDER BY timestamp DESC`;
-  const result = await store.querySql(sql, args);
-  const records: BpRecord[] = [];
+  const result = await store.querySql('SELECT * FROM blood_pressure ORDER BY timestamp DESC');
+  const records: any[] = [];
   while (result.goToNextRow()) {
     records.push({
       id: result.getLong(result.getColumnIndex('id')),
       timestamp: result.getLong(result.getColumnIndex('timestamp')),
       systolic: result.getLong(result.getColumnIndex('systolic')),
       diastolic: result.getLong(result.getColumnIndex('diastolic')),
-      pulse: result.getLong(result.getColumnIndex('pulse')),
-      createTime: result.getLong(result.getColumnIndex('create_time'))
+      pulse: result.getLong(result.getColumnIndex('pulse'))
     });
   }
   result.close();
   return records;
 }
 
-export async function getLatestBpRecord(): Promise<BpRecord | null> {
-  const store = await getRdbStore();
-  const sql = `SELECT * FROM ${TABLE_BP} ORDER BY timestamp DESC LIMIT 1`;
-  const result = await store.querySql(sql);
-  if (result.goToFirstRow()) {
-    const record: BpRecord = {
-      id: result.getLong(result.getColumnIndex('id')),
-      timestamp: result.getLong(result.getColumnIndex('timestamp')),
-      systolic: result.getLong(result.getColumnIndex('systolic')),
-      diastolic: result.getLong(result.getColumnIndex('diastolic')),
-      pulse: result.getLong(result.getColumnIndex('pulse')),
-      createTime: result.getLong(result.getColumnIndex('create_time'))
-    };
-    result.close();
-    return record;
+export async function getTodayBpRecords(): Promise<any[]> {
+  const all: any[] = await getBpRecords();
+  const startOfDay: number = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).getTime();
+  const endOfDay: number = startOfDay + 24 * 60 * 60 * 1000;
+  const result: any[] = [];
+  for (let i = 0; i < all.length; i++) {
+    if (all[i].timestamp >= startOfDay && all[i].timestamp < endOfDay) {
+      result.push(all[i]);
+    }
   }
-  result.close();
-  return null;
+  return result;
 }
 
-export async function getTodayBpRecords(): Promise<BpRecord[]> {
-  const now = new Date();
-  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-  const endOfDay = startOfDay + 24 * 60 * 60 * 1000;
-  return getBpRecords(startOfDay, endOfDay);
+export async function getLatestBpRecord(): Promise<any> {
+  const records: any[] = await getBpRecords();
+  return records.length > 0 ? records[0] : null;
 }
 
-// ===== 体重记录 =====
+// 体重记录
 
-export async function insertWeightRecord(record: WeightRecord): Promise<number> {
+export async function insertWeightRecord(record: any): Promise<number> {
   const store = await getRdbStore();
-  const now = Date.now();
   const row = {
     timestamp: record.timestamp,
     weight: record.weight,
-    create_time: now
+    create_time: Date.now()
   };
-  return store.insert(TABLE_WEIGHT, row);
+  return store.insert('weight_record', row);
 }
 
-export async function getWeightRecords(limit: number = 30): Promise<WeightRecord[]> {
+export async function getWeightRecords(limit: number): Promise<any[]> {
   const store = await getRdbStore();
-  const sql = `SELECT * FROM ${TABLE_WEIGHT} ORDER BY timestamp DESC LIMIT ?`;
-  const result = await store.querySql(sql, [limit]);
-  const records: WeightRecord[] = [];
+  const result = await store.querySql('SELECT * FROM weight_record ORDER BY timestamp DESC LIMIT ?', [limit]);
+  const records: any[] = [];
   while (result.goToNextRow()) {
     records.push({
       id: result.getLong(result.getColumnIndex('id')),
       timestamp: result.getLong(result.getColumnIndex('timestamp')),
-      weight: result.getDouble(result.getColumnIndex('weight')),
-      createTime: result.getLong(result.getColumnIndex('create_time'))
+      weight: result.getDouble(result.getColumnIndex('weight'))
     });
   }
   result.close();
   return records;
 }
 
-export async function getLatestWeight(): Promise<WeightRecord | null> {
-  const store = await getRdbStore();
-  const sql = `SELECT * FROM ${TABLE_WEIGHT} ORDER BY timestamp DESC LIMIT 1`;
-  const result = await store.querySql(sql);
-  if (result.goToFirstRow()) {
-    const record: WeightRecord = {
-      id: result.getLong(result.getColumnIndex('id')),
-      timestamp: result.getLong(result.getColumnIndex('timestamp')),
-      weight: result.getDouble(result.getColumnIndex('weight')),
-      createTime: result.getLong(result.getColumnIndex('create_time'))
-    };
-    result.close();
-    return record;
-  }
-  result.close();
-  return null;
+export async function getLatestWeight(): Promise<any> {
+  const records: any[] = await getWeightRecords(1);
+  return records.length > 0 ? records[0] : null;
 }
 
-// ===== 化验记录 =====
+// 化验记录
 
-export async function insertLabTest(record: LabTestRecord): Promise<number> {
+export async function insertLabTest(record: any): Promise<number> {
   const store = await getRdbStore();
-  const now = Date.now();
   const row = {
     timestamp: record.timestamp,
     test_type: record.testType,
     items: JSON.stringify(record.items),
-    create_time: now
+    create_time: Date.now()
   };
-  return store.insert(TABLE_LAB, row);
+  return store.insert('lab_test', row);
 }
 
-export async function getLabTests(limit: number = 20): Promise<LabTestRecord[]> {
+export async function getLabTests(limit: number): Promise<any[]> {
   const store = await getRdbStore();
-  const sql = `SELECT * FROM ${TABLE_LAB} ORDER BY timestamp DESC LIMIT ?`;
-  const result = await store.querySql(sql, [limit]);
-  const records: LabTestRecord[] = [];
+  const result = await store.querySql('SELECT * FROM lab_test ORDER BY timestamp DESC LIMIT ?', [limit]);
+  const records: any[] = [];
   while (result.goToNextRow()) {
-    const items: TestRecordItem[] = JSON.parse(result.getString(result.getColumnIndex('items'))) as TestRecordItem[];
+    const itemsStr: string = result.getString(result.getColumnIndex('items'));
+    let items: any[] = [];
+    try {
+      items = JSON.parse(itemsStr);
+    } catch (e) {
+      items = [];
+    }
     records.push({
       id: result.getLong(result.getColumnIndex('id')),
       timestamp: result.getLong(result.getColumnIndex('timestamp')),
-      testType: result.getString(result.getColumnIndex('test_type')) as 'blood' | 'urine',
-      items: items,
-      createTime: result.getLong(result.getColumnIndex('create_time'))
+      testType: result.getString(result.getColumnIndex('test_type')),
+      items: items
     });
   }
   result.close();
   return records;
 }
 
-export async function getLatestLabTest(): Promise<LabTestRecord | null> {
-  const store = await getRdbStore();
-  const sql = `SELECT * FROM ${TABLE_LAB} ORDER BY timestamp DESC LIMIT 1`;
-  const result = await store.querySql(sql);
-  if (result.goToFirstRow()) {
-    const items: TestRecordItem[] = JSON.parse(result.getString(result.getColumnIndex('items'))) as TestRecordItem[];
-    const record: LabTestRecord = {
-      id: result.getLong(result.getColumnIndex('id')),
-      timestamp: result.getLong(result.getColumnIndex('timestamp')),
-      testType: result.getString(result.getColumnIndex('test_type')) as 'blood' | 'urine',
-      items: items,
-      createTime: result.getLong(result.getColumnIndex('create_time'))
-    };
-    result.close();
-    return record;
-  }
-  result.close();
-  return null;
+export async function getLatestLabTest(): Promise<any> {
+  const records: any[] = await getLabTests(1);
+  return records.length > 0 ? records[0] : null;
 }
