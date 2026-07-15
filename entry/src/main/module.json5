@@ -1,7 +1,7 @@
 {
   "module": {
     "name": "entry",
-    "type": "atomicService",
+    "type": "entry",
     "description": "$string:entry_desc",
     "mainElement": "EntryAbility",
     "deviceTypes": ["phone"],
